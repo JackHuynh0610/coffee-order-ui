@@ -89,7 +89,6 @@
     </style>
     <div class="container">
         <h1>Choose Your Condiments</h1>
-        <div id="beverage-info"></div>
         <button onclick="selectCondiment('Mocha')">Mocha</button>
         <button onclick="selectCondiment('Milk')">Milk</button>
     </div>
@@ -100,31 +99,64 @@
     <div class="container">
         <button onclick="submitOrder()">Submit</button>
     </div>
+    <h1 class="container">CART</h1>
+    <div id="beverage-info"></div>
 
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Get the beverage information from the query parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const beverage = urlParams.get('beverage');
+    // Get the beverage information from the query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const beverage = urlParams.get('beverage');
 
-            // Display the initial beverage information
-            updateBeverageInfo(`${beverage}`);
-        });
+    // Display the initial beverage information
+    updateBeverageInfo(`${beverage}`);
+});
 
-        function selectCondiment(condiment) {
-            // Get the current beverage information
-            const currentBeverageInfo = document.getElementById('beverage-info').textContent;
+function selectCondiment(condiment) {
+    // Get the current beverage information
+    const currentBeverageInfo = document.getElementById('beverage-info').textContent;
 
-            // Update the beverage info to include the selected condiment
-            updateBeverageInfo(`${currentBeverageInfo}, ${condiment}`);
-        }
+    // Update the beverage info to include the selected condiment
+    updateBeverageInfo(`${currentBeverageInfo}, ${condiment}`);
+}
 
-        function updateBeverageInfo(info) {
-            // Display the updated beverage information
-            const beverageInfoElement = document.getElementById('beverage-info');
-            beverageInfoElement.textContent = info;
-        }
+function updateBeverageInfo(info) {
+    // Display the updated beverage information
+    const beverageInfoElement = document.getElementById('beverage-info');
+    beverageInfoElement.textContent = info;
+
+    // Add event listeners to each condiment in the cart
+    const condimentButtons = beverageInfoElement.querySelectorAll('button');
+    condimentButtons.forEach(button => {
+        button.onclick = function () {
+            const buttonContent = button.textContent.trim();
+
+            // Check if the clicked condiment is already in the cart
+            if (info.includes(buttonContent)) {
+                // Remove the condiment if it's already selected
+                const updatedCondiments = info
+                    .replace(`${buttonContent},`, '') // Remove if it's in the middle
+                    .replace(`${buttonContent}`, ''); // Remove if it's at the end
+
+                // Update the beverage info
+                updateBeverageInfo(updatedCondiments);
+            } else {
+                // Add the condiment to the selected list
+                updateBeverageInfo(`${info}, ${buttonContent}`);
+            }
+        };
+    });
+
+    // Add event listener to the beverage itself
+    beverageInfoElement.onclick = function () {
+        // Remove the beverage from the cart
+        updateBeverageInfo('');
+
+        // Navigate back to the beverage page (you may need to replace 'beverage.html' with your actual page URL)
+        window.location.href = 'beverage.html';
+    };
+}
 
         function submitOrder() {
             // Get the beverage and condiments from the current beverage information
