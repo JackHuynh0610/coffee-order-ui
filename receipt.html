@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #8B4513; /* Brown background color */
+            color: #fff; /* White text color */
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #receipt-info {
+            padding: 20px;
+            border: 2px solid #fff; /* White border */
+            border-radius: 10px;
+            background-color: #D2B48C; /* Tan background color */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            text-align: left;
+        }
+
+        #receipt-info h2 {
+            color: #fff; /* White text color */
+            margin-bottom: 20px;
+        }
+
+        #receipt-info p {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #333; /* Dark text color */
+        }
+    </style>
+</head>
+<body>
+    <div id="receipt-info">
+        <h2>Order Receipt</h2>
+        <p><strong>Order ID:</strong> <span id="order-id"></span></p>
+        <p><strong>Description:</strong> <span id="order-description"></span></p>
+        <p><strong>Price:</strong> $<span id="order-price"></span></p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get parameters from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            const description = urlParams.get('description');
+            const cost = urlParams.get('cost');
+
+            // Display the information on the page
+            document.getElementById('order-id').textContent = id;
+            document.getElementById('order-description').textContent = description;
+            document.getElementById('order-price').textContent = cost;
+        });
+    </script>
+</body>
+</html>

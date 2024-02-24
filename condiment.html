@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Condiment Selection</title>
+</head>
+
+<body>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #8B4513;
+            /* Brown background color */
+            color: #fff;
+            /* White text color */
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        button {
+            width: 150px;
+            /* Set a fixed width for the buttons */
+            height: 40px;
+            /* Set a fixed height for the buttons */
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            background-color: #A52A2A;
+            /* Brown button color */
+            color: #fff;
+            /* White text color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #800000;
+            /* Darker brown on hover */
+        }
+
+        /* Style to create a 2x2 grid for condiment buttons */
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 10px;
+            /* Add some gap between buttons */
+        }
+
+        /* Style to display selected beverage vertically */
+        #beverage-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        /* Style for the submit button */
+        #submit-button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background-color: #A52A2A;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #submit-button:hover {
+            background-color: #800000;
+        }
+    </style>
+    <div class="container">
+        <h1>Choose Your Condiments</h1>
+        <div id="beverage-info"></div>
+        <button onclick="selectCondiment('Mocha')">Mocha</button>
+        <button onclick="selectCondiment('Milk')">Milk</button>
+    </div>
+    <div class="container">
+        <button onclick="selectCondiment('Soy')">Soy</button>
+        <button onclick="selectCondiment('Whip')">Whip</button>
+    </div>
+    <div class="container">
+        <button onclick="submitOrder()">Submit</button>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the beverage information from the query parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const beverage = urlParams.get('beverage');
+
+            // Display the initial beverage information
+            updateBeverageInfo(`${beverage}`);
+        });
+
+        function selectCondiment(condiment) {
+            // Get the current beverage information
+            const currentBeverageInfo = document.getElementById('beverage-info').textContent;
+
+            // Update the beverage info to include the selected condiment
+            updateBeverageInfo(`${currentBeverageInfo}, ${condiment}`);
+        }
+
+        function updateBeverageInfo(info) {
+            // Display the updated beverage information
+            const beverageInfoElement = document.getElementById('beverage-info');
+            beverageInfoElement.textContent = info;
+        }
+
+        function submitOrder() {
+            // Get the beverage and condiments from the current beverage information
+            const beverageInfo = document.getElementById('beverage-info').textContent;
+            const [selectedBeverage, ...selectedCondiments] = beverageInfo.split(',').map(item => item.trim());
+
+            // Create the finalOrder object
+            const finalOrder = {
+                beverage: selectedBeverage,
+                condiments: selectedCondiments,
+            };
+
+            // Log the finalOrder to the console
+            console.log('Final Order:', finalOrder);
+
+            // Send the gathered information to the backend using fetch
+            fetch('http://localhost:8080/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(finalOrder),
+            })
+                .then(response => {
+                    console.log('Response Status:', response.status);
+                    console.log('Response Headers:', response.headers.get('Content-Type'));
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Response Data:', data);
+
+                    // Extract data from the response
+                    const { id, description, cost } = data;
+
+                    // Construct URL with query parameters
+                    const redirectURL = `receipt.html?id=${id}&description=${description}&cost=${cost}`;
+
+                    // Redirect to receipt.html
+                    window.location.href = redirectURL;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error submitting order. Please try again.');
+                });
+        }
+
+    </script>
+</body>
+
+</html>

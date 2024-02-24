@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Beverage Options</title>
+</head>
+<body>
+    <style>
+        body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #8B4513; /* Brown background color */
+    color: #fff; /* White text color */
+}
+
+.container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+button {
+    width: 150px; /* Set a fixed width for the buttons */
+    height: 150px; /* Set a fixed height for the buttons */
+    margin: 10px;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    background-color: #A52A2A; /* Brown button color */
+    color: #fff; /* White text color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #800000; /* Darker brown on hover */
+}
+
+/* Style to create a 2x2 grid */
+.button-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+    </style>
+     <div class="container">
+        <h1>Choose Your Beverage</h1>
+        <button onclick="orderBeverage('Dark Roast')">Dark Roast</button>
+        <button onclick="orderBeverage('House Blend')">House Blend</button>
+    </div>
+    <div class="container">
+        <button onclick="orderBeverage('Espresso')">Espresso</button>
+        <button onclick="orderBeverage('Decaf')">Decaf</button>
+    </div>
+
+    <script>
+        function orderBeverage(beverageType) {
+            window.location.href = 'condiment.html?beverage=' + encodeURIComponent(beverageType);
+        }
+    </script>
+</body>
+</html>
