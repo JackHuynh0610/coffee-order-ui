@@ -70,6 +70,8 @@
             margin-top: 20px;
         }
 
+        
+
         /* Style for the submit button */
         #submit-button {
             width: 100%;
@@ -86,6 +88,8 @@
         #submit-button:hover {
             background-color: #800000;
         }
+
+
     </style>
     <div class="container">
         <h1>Choose Your Condiments</h1>
@@ -100,7 +104,7 @@
         <button onclick="submitOrder()">Submit</button>
     </div>
     <h1 class="container">CART</h1>
-    <div id="beverage-info"></div>
+    <div class="info" id="beverage-info"></div>
 
 
     <script>
@@ -173,7 +177,7 @@ function updateBeverageInfo(info) {
             console.log('Final Order:', finalOrder);
 
             // Send the gathered information to the backend using fetch
-            fetch('http://localhost:8080/orders', {
+            fetch('https://coffee-order-latest-bh9g.onrender.com/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
